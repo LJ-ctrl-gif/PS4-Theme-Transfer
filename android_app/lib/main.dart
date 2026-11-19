@@ -109,6 +109,9 @@ class _TransferHomeState extends State<TransferHome> {
       );
       if (result == null || result.files.isEmpty) return;
       final file = result.files.single;
+      if (file.size > 32 * 1024 * 1024) {
+        throw const FormatException('This receiver prototype accepts files up to 32 MiB.');
+      }
       final bytes = file.bytes;
       if (bytes == null || bytes.isEmpty) {
         throw const FormatException('The selected file could not be read.');
