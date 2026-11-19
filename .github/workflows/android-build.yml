@@ -35,6 +35,15 @@ jobs:
           cache: true
       - name: Generate Android platform project
         run: flutter create --project-name ps4_theme_transfer --org com.ljctrlgif --platforms=android .
+      - name: Allow local HTTP receiver connections
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("android/app/src/main/AndroidManifest.xml")
+          text = path.read_text()
+          text = text.replace("<application", '<application android:usesCleartextTraffic="true"', 1)
+          path.write_text(text)
+          PY
       - name: Resolve dependencies
         run: flutter pub get
       - name: Analyze
